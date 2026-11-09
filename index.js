@@ -177,6 +177,23 @@ bot.command('visto', (ctx) => {
     });
 });
 
+// Comando para ver todo el plan de entrenamiento de la semana
+bot.command('rutinas', (ctx) => {
+    db.all(`SELECT dia_semana, enfoque, ejercicios FROM rutinas`, [], (err, filas) => {
+        if (err) return ctx.reply('❌ Error al consultar las rutinas.');
+        if (filas.length === 0) return ctx.reply('⚠️ No hay rutinas guardadas en la base de datos.');
+        
+        let mensaje = '🏋️‍♂️ *Plan Semanal de Hipertrofia:*\n\n';
+        filas.forEach(f => {
+            // Pone la primera letra del día en mayúscula
+            const dia = f.dia_semana.charAt(0).toUpperCase() + f.dia_semana.slice(1);
+            mensaje += `*${dia}:* ${f.enfoque}\n└ ${f.ejercicios.replace(/, /g, '\n└ ')}\n\n`;
+        });
+        
+        ctx.replyWithMarkdown(mensaje);
+    });
+});
+
 // Comandos de Entrenamiento
 bot.command('rutina', (ctx) => {
     const dias = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
@@ -194,6 +211,11 @@ bot.command('rutina', (ctx) => {
     });
 });
 
+// Comando para "limpiar" la pantalla en Telegram
+bot.command('limpiar', (ctx) => {
+    const saltosDeLinea = '\n'.repeat(60);
+    ctx.reply(`🧹 Limpiando el chat...${saltosDeLinea}✨ ¡Pantalla despejada!`);
+});
 bot.catch((err, ctx) => console.error(`[Fallo en Telegraf]`, err.message));
 
 bot.launch();
