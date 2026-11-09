@@ -1,0 +1,12 @@
+# Dependencias de Node
+node_modules/
+
+# Variables de entorno (Token del bot)
+.env
+
+# Base de datos local
+cerebro.db
+cerebro.db-journal
+
+# Logs
+npm-debug.log*
